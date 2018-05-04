@@ -126,21 +126,32 @@ class MotionPlanning(Drone):
         # TODO: retrieve current global position
  
         # TODO: convert to current local position using global_to_local()
+        lat0 = 37.792480
+        lon0 = -122.397450
+        #local_home = global_to_local([lon0,lat0,0,0],self.global_home)
+        #self.cmd_position(local_home[0],local_home[1],self.local_position[2],0)
+        self.set_home_position(lon0,lat0,0)
         
         print('global home {0}, position {1}, local position {2}'.format(self.global_home, self.global_position,
                                                                          self.local_position))
+        
+        
+        
         # Read in obstacle map
         data = np.loadtxt('colliders.csv', delimiter=',', dtype='Float64', skiprows=2)
-        
+       
         # Define a grid for a particular altitude and safety margin around obstacles
         grid, north_offset, east_offset = create_grid(data, TARGET_ALTITUDE, SAFETY_DISTANCE)
         print("North offset = {0}, east offset = {1}".format(north_offset, east_offset))
         # Define starting point on the grid (this is just grid center)
         grid_start = (-north_offset, -east_offset)
+        #grid_start = (int(self.local_position[0]), int(self.local_position[1]))
         # TODO: convert start position to current position rather than map center
+        #self.cmd_position(grid_start[0],grid_start[1],self.local_position[2],0)
+        
         
         # Set goal as some arbitrary position on the grid
-        grid_goal = (-north_offset + 10, -east_offset + 10)
+        grid_goal = (-north_offset + 50, -east_offset + 40)
         # TODO: adapt to set goal as latitude / longitude position and convert
 
         # Run A* to find a path from start to goal
@@ -153,6 +164,7 @@ class MotionPlanning(Drone):
 
         # Convert path to waypoints
         waypoints = [[p[0] + north_offset, p[1] + east_offset, TARGET_ALTITUDE, 0] for p in path]
+        #waypoints = [[p[0] , p[1] , TARGET_ALTITUDE, 0] for p in path]
         # Set self.waypoints
         self.waypoints = waypoints
         # TODO: send waypoints to sim (this is just for visualization of waypoints)
