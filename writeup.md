@@ -1,18 +1,14 @@
 ## Project: 3D Motion Planning
-![Quad Image](./misc/enroute.png)
+In this project the backward_flyer is extended to find an optimal path to an arbitary location in a given map. 
 
----
+# Steps taken to complete the Project:
+1. 2.5D map is loaded from the colliders.csv file describing the environment.
+2. The environment is discretized into grid and graphs.
+3. The current location of quadcopter is set a starting point and an arbitary point in the map is chosen as goal.
+4. A* algorithm is used to perform the search an optimal path.
+5. A combination of collinearity test and bresenham algorithm is used to remove unwanted points in the identified path.
+6. Waypoints are calculated in the local ECEF coordinates from the 2D path found using A*(format for `self.all_waypoints` is [N, E, altitude, heading]).
 
-
-# Required Steps for a Passing Submission:
-1. Load the 2.5D map in the colliders.csv file describing the environment.
-2. Discretize the environment into a grid or graph representation.
-3. Define the start and goal locations.
-4. Perform a search using A* or other search algorithm.
-5. Use a collinearity test or ray tracing method (like Bresenham) to remove unnecessary waypoints.
-6. Return waypoints in local ECEF coordinates (format for `self.all_waypoints` is [N, E, altitude, heading], where the drone’s start location corresponds to [0, 0, 0, 0].
-7. Write it up.
-8. Congratulations!  Your Done!
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/1534/view) Points
 ### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
