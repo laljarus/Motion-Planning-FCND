@@ -11,18 +11,32 @@ In this project the backward_flyer is extended to find an optimal path to an arb
 
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/1534/view) Points
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
-
+### All the rubic points are considered in the project and it is discussed here how each rubic point is implemented.
 ---
 ### Writeup / README
 
 #### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
 
-You're reading it! Below I describe how I addressed each rubric point and where in my code each point is handled.
+Project report is done.
 
 ### Explain the Starter Code
 
 #### 1. Explain the functionality of what's provided in `motion_planning.py` and `planning_utils.py`
+
+The motion planning project is an extension of backyard flying project. Both the project use the event driven programming paradigm. The major difference between *'backyard_flyer_solution.py'* and *'motion_planning.py'* is that in *'motion_planning.py'* there is an additional state called **PLANNING** where the drone path is calculated using A* algirithm. Whereas in *'backyard_flyer_solution.py'* the waypoints are hard coded.
+
+The starter code of the motion planning project contains some utility funcitons in the *'planning_utils.py'* and there some more funcitons are added, which are used in the path planning algorithm. The following table shows the list functions and their description in the *'planning_utils.py'* 
+
+Name in the function | Description|
+|:-|:-|
+create_grid| This function creats a 2D grid of the environment based on the data from the **'colliders.csv'** file. This function takes into account the drone altitude and the safe distance that the drone can fly near an obstacles when creating the grid.
+Action(enum)| This enum defines the possible movements of the drone which can be used by the path planning algorithm. The following direction are defined in the enum North,East,South,West,North-East,North-West,South-East,South-East,South-West.
+valid_actions| This functions checks if all the drone actions(movements) are possible without hitting obstacles for a given location in the grid. 
+a_star| This function implements the A* algorithm it calculates the optimal path for a given start and goal location in the grid using the defined drone actions and heuristic function.
+heuristic| This function defines the heuristic i.e. it calculates an a cost between the current position and the goal without considering the grid. In this project 2nd order vector norm is used as heuristic
+collinearity_check| This function takes in three points and checks if the three points lie in straight line by calculating the area of triangle formed by the three points. This function takes in epislon as parameter which is compared with the area and decided if the points lie in a straight line.
+
+
 These scripts contain a basic planning implementation that includes...
 
 And here's a lovely image of my results (ok this image has nothing to do with it, but it's a nice example of how to include images in your writeup!)
