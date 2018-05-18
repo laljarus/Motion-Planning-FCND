@@ -35,6 +35,11 @@ valid_actions| This functions checks if all the drone actions(movements) are pos
 a_star| This function implements the A* algorithm it calculates the optimal path for a given start and goal location in the grid using the defined drone actions and heuristic function.
 heuristic| This function defines the heuristic i.e. it calculates an a cost between the current position and the goal without considering the grid. In this project 2nd order vector norm is used as heuristic
 collinearity_check| This function takes in three points and checks if the three points lie in straight line by calculating the area of triangle formed by the three points. This function takes in epislon as parameter which is compared with the area and decided if the points lie in a straight line.
+bresenham_collision_check| Given two points and grid this function checks if the line drawn between two points collide any obstacles in the grid
+prune_path_bresenham|For a given path and grid this function returns a pruned path by removing unneccasary points. This funciton works based on bresenham_collision_check.
+prune_path| For a given path and grid this function returns a pruned path by removing unneccasary points. This funciton works based on collinearity_check and bresenham_collision_check.
+find_start_goal| This function calculates the nearest starting and goal points in a graph for a given starting and goal points in the grid.
+find_waypoints| For a given 2D path this function calculates the heading angle of the drone in radians and returns the 3D waypoint along with the heading
 
 
 These scripts contain a basic planning implementation that includes...
