@@ -70,7 +70,7 @@ The picture below shows the comparision of medial axis representation against 2D
 
 ##### Voronoi Graph Representation
 
-![grid vs medial](./misc/Medial_axis_vs_Grid.png)
+![grid vs medial](./misc/voronoi_graph.png)
 
 
 #### 6. Cull waypoints 
