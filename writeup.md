@@ -70,16 +70,25 @@ The picture below shows the comparision of medial axis representation against 2D
 
 ##### Voronoi Graph Representation
 
-![grid vs medial](./misc/voronoi_graph.png)
+![voronoi](./misc/voronoi_graph.png)
 
 
 #### 6. Cull waypoints 
-For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.
+As discussed in the above section there is a problem in pruning the path calculated using medial axis representation. The following picture and the table illustrates this.
 
+![path_pruning](./misc/path_pruning.png)
 
+Pruning Method|No. of waypoints|No. of initial waypoints| Comments|
+|:-|:-|:-|:-|
+prune_path_bresenham(grid,path)|7|878| The bresenham ray tracing method is used eliminate points along the path which does not hit any obstacles in the grid. This path has very few waypoints but the path goes too close to the obstacles| 
+prune_path_bresenham(invert(skeleton),path)|199|878|The bresenham ray tracing method is used eliminate points along the path which does not hit any obstacles in the medial axis. There are too many waypoints
+prune_path(grid,path)|30|878|The pruning method is a combination of collinearity test and bresenham tracing. It has optimal no. of waypoints and the path is closer to the medial axis and so the path is safe.
+
+The prune path function takes in the 2D grid, path and epsilon value as input parameters. The function iterates through the waypoints in the path in a set of three points each time. The middle point is eliminated from the path if the area of triangle between the three points is lower than the epsilon value. If the chosen epsilon value is low then few points are eliminated from the path. If high value of epsilon is chosen more points are eliminated. Here the epsilon value is chosen in the range between 10 - 20 which means the area of the triangle is around 10-20 m^2 and the points are not collinear. This does not make sense but this is done like just for the sake of eliminating more points and it may cause the new path to hit some obstacles. This is prevented using the bresenham_collision_check. For every iteration the function takes three points in the path and checks if the area of the triangle is below a given threshold and checks if the line between first and the third point does not collide with any obstacles in the grid. The function eliminates the second point only if both the conditions are met. Using collineariy check and bresenham check gives the user to tune a parameter and change the behavior of path pruning trading off between performace and safety.
 
 ### Execute the flight
 #### 1. Does it work?
 It works!
 
+Please set the goal location in the path_plan() function. It is possible to set the goal location either in the local or global coordinates, which can be switched using the parameter *goal_set_latlon*
 
