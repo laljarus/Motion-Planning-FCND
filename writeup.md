@@ -48,20 +48,30 @@ The function *plan_path()* in the *MotionPlanning* class reads the *lat0* and *l
 
 
 #### 2. Set your current local position
-Here as long as you successfully determine your local position relative to global home you'll be all set. Explain briefly how you accomplished this in your code.
-
-
-Meanwhile, here's a picture of me flying through the trees!
-![Forest Flying](./misc/in_the_trees.png)
+The local position of the drone can be calculated in two different ways either by using the function self.local_position or by converting the global coordinates to local coordinates using the function global_to_local. Here the global location of the drone is calculated using self._latitude,self._longitude and self._altitude functions and the global position is converted to local position using the global_to_local().
 
 #### 3. Set grid start position from local position
-This is another step in adding flexibility to the start location. As long as it works you're good to go!
+The grid start position is set to the local position calculated in the last step. This is done so that the drone can start from any point in the grid rather than the map center always. 
 
 #### 4. Set grid goal position from geodetic coords
-This step is to add flexibility to the desired goal location. Should be able to choose any (lat, lon) within the map and have it rendered to a goal location on the grid.
+The program is implemented such a way that the goal position can be set either in the local ECEF coordinates or the geodatic global coordinate system. This can be switched using the parameter *goal_set_latlon* inside the *path_plan()* if the value is true then the goal is set using global coordinates and if it false local coordinates is used to set the goal. When global coordinates is used to set the goal it is converted to local coordinates and given to the A* algorithm.
 
-#### 5. Modify A* to include diagonal motion (or replace A* altogether)
-Minimal requirement here is to modify the code in planning_utils() to update the A* implementation to include diagonal motions on the grid that have a cost of sqrt(2), but more creative solutions are welcome. Explain the code you used to accomplish this step.
+#### 5. A* Implementation
+
+The starter code provides a simple A* implementation in 2D using the drone motion in the direction North,East,South and West direction. In this A* implementation two main features are added. First the diagonal movements of the drone are included in the Actions and used by the A* algorithm and the second point is the use of Medial-Axis based skeleton representation instead of the default grid. After several trials with different maps such as standard grid, voronoi graph, probablistic road map and medial axis skeleton it was found that medial axis skeleton representation perfomes in a optimal way. Medial axis reperesentation takes very less time to build the graph and find path like standard 2D grid and provides a safe path to the drone comparable to voronoi graph. In terms of drone safety voronoi graph representation performs very similar to medial axis but it takes longer time to build teh graph. Whereas probablistic road map provides a better graph making use of 3D space but it takes even longer time.
+
+Medial axis skeleton representation creates a skeleton between different obstacles and using this skeleton for A* search creates a safe path in the middle of obstacles. Using 2D grid representation the planned path is too close to the obstacles and this sometimes causes the drones to hit the obstacles. Only disadvantage of medial axis representation is that the plan if pruned using the medial-axis skeleton the plan has too many waypoints and if it is pruned using the grid the path is not along the medial axis anymore. In order to overcome this disadvantage the path pruning is done using a combination of bresenham tracing method and collinearity check which is discussed in the next section.
+
+The picture below shows the comparision of medial axis representation against 2D grid and voronoi graph representation using a path plan between two arbitary points.
+
+##### Grid vs Medial Axis
+
+![grid vs medial](.\misc\Medial_axis_vs_Grid.png)
+
+##### Voronoi Graph Representation
+
+![grid vs medial](.\misc\Medial_axis_vs_Grid.png)
+
 
 #### 6. Cull waypoints 
 For this step you can use a collinearity test or ray tracing method like Bresenham. The idea is simply to prune your path of unnecessary waypoints. Explain the code you used to accomplish this step.
@@ -71,11 +81,5 @@ For this step you can use a collinearity test or ray tracing method like Bresenh
 ### Execute the flight
 #### 1. Does it work?
 It works!
-
-### Double check that you've met specifications for each of the [rubric](https://review.udacity.com/#!/rubrics/1534/view) points.
-  
-# Extra Challenges: Real World Planning
-
-For an extra challenge, consider implementing some of the techniques described in the "Real World Planning" lesson. You could try implementing a vehicle model to take dynamic constraints into account, or implement a replanning method to invoke if you get off course or encounter unexpected obstacles.
 
 
