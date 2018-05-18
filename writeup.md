@@ -90,5 +90,5 @@ The prune path function takes in the 2D grid, path and epsilon value as input pa
 #### 1. Does it work?
 It works!
 
-Please set the goal location in the path_plan() function. It is possible to set the goal location either in the local or global coordinates, which can be switched using the parameter *goal_set_latlon*
+Please set the goal location in the path_plan() function. It is possible to set the goal location either in the local or global coordinates, which can be switched using the parameter *goal_set_latlon*.
 
